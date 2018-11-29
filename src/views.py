@@ -4,6 +4,7 @@ import webapp2
 import jinja2
 
 from google.appengine.ext import db
+from google.appengine.api import users
 
 from models import Adds 
 
@@ -27,8 +28,16 @@ class BaseHandler(webapp2.RequestHandler):
 class ShowAdds(BaseHandler):
     
     def get(self):
-        adds = Adds.all()
-        self.render_template('adds.html', {'adds': adds})
+        user = users.get_current_user()
+        if user:
+            adds = Adds.all()
+            self.response.out.write(
+                "%s <a href='%s'>Salir</a>" % 
+                (user.nickname(), users.create_logout_url('/'))
+            )
+            self.render_template('adds.html', {'adds': adds})
+        else:
+            self.redirect(users.create_login_url(self.request.uri))   
         
 class NewAdd(BaseHandler):
 
