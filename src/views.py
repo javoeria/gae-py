@@ -6,7 +6,7 @@ import jinja2
 from google.appengine.ext import db
 from google.appengine.api import users
 
-from models import Adds 
+from models import Comic, Imagen, Comentario
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_environment = \
@@ -24,6 +24,22 @@ class BaseHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template(filename)
         self.response.out.write(template.render(template_values))
 
+class MainPage(webapp2.RequestHandler):
+    
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            comics = Comic.all()
+            self.response.out.write(
+                "%s <a href='%s'>Salir</a>" % 
+                (user.nickname(), users.create_logout_url('/'))
+            )
+            self.render_template('adds.html', {'adds': comics}) #CHANGE:ADDS
+        else:
+            self.redirect(users.create_login_url(self.request.uri)) 
+
+
+##################################
 
 class ShowAdds(BaseHandler):
     
