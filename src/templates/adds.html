@@ -22,21 +22,24 @@
             <th>Portada</th>
             <th>Nombre</th>
             <th>Descripci&oacute;n</th>
-            <th>E-mail</th>
-            <th>Fecha de creaci&oacute;n</th>
-            <th>Fecha de actualizaci&oacute;n</th>
+            <th>Autor</th>
+            <th>Fecha creaci&oacute;n</th>
+            <th>Fecha actualizaci&oacute;n</th>
             <th>Acciones</th>
             </thead>
             <tbody>
             {% for comic in comics %}
             <tr>
-            	<td><img src="http://oyster.ignimgs.com/wordpress/stg.ign.com/2018/03/Infinity-Gauntlet.jpg"  width="60" height="100"></td>
+            	<td><img src="{{ comic.cover }}" height="100"></td>
                 <td>{{ comic.name }}</td>
-                <td>{{ comic.description }}</td>
+                <td>{{ comic.description|truncate(300) }}</td>
                 <td>{{ comic.author }}</td>
                 <td>{{ comic.create_date.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>{{ comic.update_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td><a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a></td>
+                <td>
+                	<a class="btn btn-success" href="/show/{{ comic.key().id() }}">Ver</a>
+                	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
+                </td>
             </tr>
             {% endfor %}
             </tbody>
@@ -53,7 +56,6 @@
         <div class="col-md-3"></div>
     </div>
 </div>
-
 {% endif %}
 
 <script type="text/javascript">

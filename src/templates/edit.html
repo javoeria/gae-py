@@ -24,9 +24,16 @@
             <div class="form-group">
                 <label for="inputDescription" class="col-sm-3 control-label">Descripci&oacute;n</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="inputDescription" id="inputDescription" placeholder="text" value="{{ comic.description }}">
+                    <textarea class="form-control" name="inputDescription" id="inputDescription" placeholder="text">{{ comic.description }}</textarea>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="inputURL" class="col-sm-3 control-label">URL</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="inputURL" id="inputURL" placeholder="text" value="{{ comic.cover }}" oninput="readURL(this.value)">
+                </div>
+            </div>
+            <center><img src="{{ comic.cover }}" id="image"></center>
             <div class="form-group text-center">
                 <button type="submit" value="submit" class="btn btn-warning">Actualizar</button>
                 <a class="btn btn-danger" href ="/delete/{{ comic.key().id() }}">Eliminar</a>
@@ -39,5 +46,10 @@
 
 <script src="../static/js/jquery.js"></script>
 <script src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	function readURL(input) {
+		document.getElementById("image").src = input;
+	}
+</script>
 
 {% endblock content %}

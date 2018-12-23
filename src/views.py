@@ -31,8 +31,8 @@ class ShowComics(BaseHandler):
         if user:
             comics = Comic.all()
             self.response.out.write(
-                "%s <a href='%s'>Salir</a>" % 
-                (user.nickname(), users.create_logout_url('/'))
+                "%s (%s) <a href='%s'>Salir</a>" % 
+                (user.nickname(), users.is_current_user_admin(), users.create_logout_url('/'))
             )
             self.render_template('adds.html', {'comics': comics})
         else:
@@ -42,7 +42,8 @@ class NewComic(BaseHandler):
 
     def post(self):
         comic = Comic(name=self.request.get('inputName'),
-                      description=self.request.get('inputDescription'))
+                      description=self.request.get('inputDescription'),
+                      cover=self.request.get('inputURL'))
         comic.put()
         return webapp2.redirect('/')
 
@@ -57,6 +58,7 @@ class EditComic(BaseHandler):
         comic = db.get(db.Key.from_path('Comic', iden))
         comic.name = self.request.get('inputName')
         comic.description = self.request.get('inputDescription')
+        comic.cover = self.request.get('inputURL')
         comic.update_date = datetime.now()
         comic.put()
         return webapp2.redirect('/')
