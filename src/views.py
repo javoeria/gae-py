@@ -6,7 +6,7 @@ import jinja2
 from google.appengine.ext import db
 from google.appengine.api import users
 
-from models import Comic, Imagen, Comentario
+from models import Comic, Image, Comment
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_environment = \
@@ -24,7 +24,7 @@ class BaseHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template(filename)
         self.response.out.write(template.render(template_values))
 
-class MainPage(webapp2.RequestHandler):
+class ShowComics(BaseHandler):
     
     def get(self):
         user = users.get_current_user()
@@ -34,64 +34,45 @@ class MainPage(webapp2.RequestHandler):
                 "%s <a href='%s'>Salir</a>" % 
                 (user.nickname(), users.create_logout_url('/'))
             )
-            self.render_template('adds.html', {'adds': comics}) #CHANGE:ADDS
-        else:
-            self.redirect(users.create_login_url(self.request.uri)) 
-
-
-##################################
-
-class ShowAdds(BaseHandler):
-    
-    def get(self):
-        user = users.get_current_user()
-        if user:
-            adds = Adds.all()
-            self.response.out.write(
-                "%s <a href='%s'>Salir</a>" % 
-                (user.nickname(), users.create_logout_url('/'))
-            )
-            self.render_template('adds.html', {'adds': adds})
+            self.render_template('adds.html', {'comics': comics})
         else:
             self.redirect(users.create_login_url(self.request.uri))   
         
-class NewAdd(BaseHandler):
+class NewComic(BaseHandler):
 
     def post(self):
-        add = Adds(author=self.request.get('inputAuthor'),
-                  text=self.request.get('inputText'),
-                  priority=int(self.request.get('inputPriority')))
-        add.put()
+        comic = Comic(name=self.request.get('inputName'),
+                      description=self.request.get('inputDescription'))
+        comic.put()
         return webapp2.redirect('/')
 
     def get(self):
         self.render_template('new.html', {})
 
 
-class EditAdd(BaseHandler):
+class EditComic(BaseHandler):
 
     def post(self, add_id):
         iden = int(add_id)
-        add = db.get(db.Key.from_path('Adds', iden))
-        add.author = self.request.get('inputAuthor')
-        add.text = self.request.get('inputText')
-        add.priority = int(self.request.get('inputPriority'))
-        add.date = datetime.now()
-        add.put()
+        comic = db.get(db.Key.from_path('Comic', iden))
+        comic.name = self.request.get('inputName')
+        comic.description = self.request.get('inputDescription')
+        comic.update_date = datetime.now()
+        comic.put()
         return webapp2.redirect('/')
 
     def get(self, add_id):
         iden = int(add_id)
-        add = db.get(db.Key.from_path('Adds', iden))
-        self.render_template('edit.html', {'add': add})
+        comic = db.get(db.Key.from_path('Comic', iden))
+        self.render_template('edit.html', {'comic': comic})
 
 
-class DeleteAdd(BaseHandler):
+class DeleteComic(BaseHandler):
 
     def get(self, add_id):
         iden = int(add_id)
-        add = db.get(db.Key.from_path('Adds', iden))
-        db.delete(add)
+        comic = db.get(db.Key.from_path('Comic', iden))
+        db.delete(comic)
         return webapp2.redirect('/')
 
 
