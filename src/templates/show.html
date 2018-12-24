@@ -17,12 +17,77 @@
 <div class="row">
     <div class="col-md-6">
     	<h4>{{ comic.description }}</h4>
+    	<h4>Autor: {{ comic.author }}</h4>
+    	<h4>Fecha de creaci&oacute;n: {{ comic.create_date.strftime('%Y-%m-%d %H:%M') }}</h4>
+    	<h4>Fecha de actualizaci&oacute;n: {{ comic.update_date.strftime('%Y-%m-%d %H:%M') }}</h4>
     	<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ comic.name }}" data-size="large">Tweet</a>&nbsp;
         <div class="fb-share-button" data-href="https://1-dot-python-188518.appspot.com/show/{{ comic.key().id() }}" data-layout="button" data-size="large" data-mobile-iframe="true"></div>
 	</div>
 	<div class="col-md-6">
     	<img src="{{ comic.cover }}">
 	</div>
+</div>
+<br/>
+
+<!-- Container for the image gallery -->
+<div class="container">
+
+  <!-- Full-width images with number text -->
+  <div class="mySlides">
+    <div class="numbertext">1 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_woods_wide.jpg" style="width:100%">
+  </div>
+  <div class="mySlides">
+    <div class="numbertext">2 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_5terre_wide.jpg" style="width:100%">
+  </div>
+  <div class="mySlides">
+    <div class="numbertext">3 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_mountains_wide.jpg" style="width:100%">
+  </div>
+  <div class="mySlides">
+    <div class="numbertext">4 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_lights_wide.jpg" style="width:100%">
+  </div>
+  <div class="mySlides">
+    <div class="numbertext">5 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
+  </div>
+  <div class="mySlides">
+    <div class="numbertext">6 / 6</div>
+      <img src="https://www.w3schools.com/howto/img_snow_wide.jpg" style="width:100%">
+  </div>
+
+  <!-- Next and previous buttons -->
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+  <!-- Image text -->
+  <div class="caption-container">
+    <p id="caption"></p>
+  </div>
+
+  <!-- Thumbnail images -->
+  <div class="row">
+    <div class="column">
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_woods.jpg" style="width:100%" onclick="currentSlide(1)" alt="The Woods">
+    </div>
+    <div class="column"> 
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_5terre.jpg" style="width:100%" onclick="currentSlide(2)" alt="Cinque Terre">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_mountains.jpg" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_lights.jpg" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_nature.jpg" style="width:100%" onclick="currentSlide(5)" alt="Nature and sunrise">
+    </div> 
+    <div class="column">
+      <img class="demo cursor" src="https://www.w3schools.com/howto/img_snow.jpg" style="width:100%" onclick="currentSlide(6)" alt="Snowy Mountains">
+    </div>
+  </div>
 </div>
 <br/>
 
@@ -91,6 +156,39 @@
   js.src = 'https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v3.2';
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+
+<script type="text/javascript">
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
 
 <script src="../static/js/jquery.js"></script>
 <script src="../static/js/bootstrap.min.js"></script>

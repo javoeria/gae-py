@@ -35,20 +35,16 @@
             <th>Nombre</th>
             <th>Descripci&oacute;n</th>
             <th>Autor</th>
-            <th>Fecha creaci&oacute;n</th>
-            <th>Fecha actualizaci&oacute;n</th>
             <th>Acciones</th>
             </thead>
             <tbody>
             {% for comic in comics %}
-            {% if comic.name.upper().startswith(input.upper()) %}
+            {% if comic.name.upper().startswith(input.upper()) or (comic.author|string).upper().startswith(input.upper()) %}
             <tr>
             	<td><img src="{{ comic.cover }}" height="100"></td>
                 <td>{{ comic.name }}</td>
-                <td>{{ comic.description|truncate(300) }}</td>
+                <td>{{ comic.description|truncate(500) }}</td>
                 <td>{{ comic.author }}</td>
-                <td>{{ comic.create_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ comic.update_date.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>
                 	<a class="btn btn-success" href="/show/{{ comic.key().id() }}">Ver</a>
                 	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
