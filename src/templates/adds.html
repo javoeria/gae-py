@@ -7,12 +7,24 @@
     </div>
 </div>
 <br/>
-<a class="btn btn-primary" href="/new">
-    Crear comic
-    <span style="margin-left: 5px;" class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-</a>
-<br/>
-<br/>
+
+<div class="row">
+	<div class="col-md-2">
+		<a class="btn btn-primary" href="/new">
+	    	Crear comic
+	    	<span style="margin-left: 5px;" class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+		</a>
+	</div>
+    <div class="col-md-8">
+		<form class="form-horizontal" role="form" action="/" method="get">
+			<div class="form-group text-center">
+	        	<input type="text" name="input" id="input" value="{{ input }}" size="50"/>
+	        	<button type="submit" value="submit" class="btn">Buscar <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+			</div>
+		</form>
+	</div>
+    <div class="col-md-2"></div>
+</div>
 
 {% if comics.count() > 0 %}
 <div class="row">
@@ -29,6 +41,7 @@
             </thead>
             <tbody>
             {% for comic in comics %}
+            {% if comic.name.upper().startswith(input.upper()) %}
             <tr>
             	<td><img src="{{ comic.cover }}" height="100"></td>
                 <td>{{ comic.name }}</td>
@@ -41,6 +54,7 @@
                 	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
             </tbody>
         </table>

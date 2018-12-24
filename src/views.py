@@ -2,6 +2,7 @@ from datetime import datetime
 import os
 import webapp2
 import jinja2
+import time
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -30,11 +31,12 @@ class ShowComics(BaseHandler):
         user = users.get_current_user()
         if user:
             comics = Comic.all()
+            input = self.request.get('input')
             if users.is_current_user_admin():
                 role = "Dibujante"
             else:
                 role = "Lector"
-            self.render_template('adds.html', {'comics': comics, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
+            self.render_template('adds.html', {'comics': comics, 'input': input, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
         else:
             self.redirect(users.create_login_url(self.request.uri))
         
@@ -57,6 +59,16 @@ class NewComic(BaseHandler):
 
 
 class ViewComic(BaseHandler):
+
+    def post(self, comic_id):
+        iden = int(comic_id)
+        comic = db.get(db.Key.from_path('Comic', iden))
+        comment = Comment(comic = comic,
+                          mark = bool(self.request.get('inputMark')),
+                          text = self.request.get('inputComment'))
+        comment.put()
+        time.sleep(.1)
+        return webapp2.redirect('/show/'+comic_id)
 
     def get(self, comic_id):
         user = users.get_current_user()
