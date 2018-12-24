@@ -34,9 +34,9 @@ class ShowComics(BaseHandler):
                 "%s (%s) <a href='%s'>Salir</a>" % 
                 (user.nickname(), users.is_current_user_admin(), users.create_logout_url('/'))
             )
-            self.render_template('adds.html', {'comics': comics})
+            self.render_template('adds.html', {'comics': comics, 'user': user})
         else:
-            self.redirect(users.create_login_url(self.request.uri))   
+            self.redirect(users.create_login_url(self.request.uri))
         
 class NewComic(BaseHandler):
 
@@ -51,10 +51,17 @@ class NewComic(BaseHandler):
         self.render_template('new.html', {})
 
 
+class ViewComic(BaseHandler):
+
+    def get(self, comic_id):
+        iden = int(comic_id)
+        comic = db.get(db.Key.from_path('Comic', iden))
+        self.render_template('show.html', {'comic': comic, 'id': comic_id})
+
 class EditComic(BaseHandler):
 
-    def post(self, add_id):
-        iden = int(add_id)
+    def post(self, comic_id):
+        iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
         comic.name = self.request.get('inputName')
         comic.description = self.request.get('inputDescription')
@@ -63,16 +70,16 @@ class EditComic(BaseHandler):
         comic.put()
         return webapp2.redirect('/')
 
-    def get(self, add_id):
-        iden = int(add_id)
+    def get(self, comic_id):
+        iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
         self.render_template('edit.html', {'comic': comic})
 
 
 class DeleteComic(BaseHandler):
 
-    def get(self, add_id):
-        iden = int(add_id)
+    def get(self, comic_id):
+        iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
         db.delete(comic)
         return webapp2.redirect('/')
