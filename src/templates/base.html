@@ -51,11 +51,13 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Comics</a>
-
+                	<a>{{ user }} ({{ role }})</a>
                 </li>
                 <li>
-                   <!-- <a href="/login"> <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</a> -->
+                    <a href="/"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Comics</a>
+                </li>
+                <li>
+                	<a href="{{ logout }}"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Salir</a>
                 </li>
             </ul>
         </div>

@@ -8,7 +8,7 @@
     <div class="col-lg-12 text-center">
         <h1>
         	{{ comic.name }}
-        	<a class="btn btn-primary" href="/edit/{{ comic.key().id() }}">Editar</a>
+        	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
         </h1>
     </div>
 </div>
@@ -17,16 +17,13 @@
 <div class="row">
     <div class="col-md-6">
     	<h4>{{ comic.description }}</h4>
+    	<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ comic.name }}" data-size="large">Tweet</a>&nbsp;
+        <div class="fb-share-button" data-href="https://1-dot-python-188518.appspot.com/show/{{ comic.key().id() }}" data-layout="button" data-size="large" data-mobile-iframe="true"></div>
 	</div>
 	<div class="col-md-6">
     	<img src="{{ comic.cover }}">
 	</div>
 </div>
-<br/>
-
-<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ comic.name }}" data-size="large">Tweet</a>
-<div class="fb-share-button" data-href="https://1-dot-python-188518.appspot.com/show/{{ id }}" data-layout="button" data-size="large" data-mobile-iframe="true"></div>
-<br/>
 <br/>
 
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

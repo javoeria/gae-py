@@ -30,11 +30,11 @@ class ShowComics(BaseHandler):
         user = users.get_current_user()
         if user:
             comics = Comic.all()
-            self.response.out.write(
-                "%s (%s) <a href='%s'>Salir</a>" % 
-                (user.nickname(), users.is_current_user_admin(), users.create_logout_url('/'))
-            )
-            self.render_template('adds.html', {'comics': comics, 'user': user})
+            if users.is_current_user_admin():
+                role = "Dibujante"
+            else:
+                role = "Lector"
+            self.render_template('adds.html', {'comics': comics, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
         else:
             self.redirect(users.create_login_url(self.request.uri))
         
@@ -48,15 +48,25 @@ class NewComic(BaseHandler):
         return webapp2.redirect('/')
 
     def get(self):
-        self.render_template('new.html', {})
+        user = users.get_current_user()
+        if users.is_current_user_admin():
+            role = "Dibujante"
+        else:
+            role = "Lector"
+        self.render_template('new.html', {'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
 
 
 class ViewComic(BaseHandler):
 
     def get(self, comic_id):
+        user = users.get_current_user()
+        if users.is_current_user_admin():
+            role = "Dibujante"
+        else:
+            role = "Lector"
         iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
-        self.render_template('show.html', {'comic': comic, 'id': comic_id})
+        self.render_template('show.html', {'comic': comic, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
 
 class EditComic(BaseHandler):
 
@@ -71,9 +81,14 @@ class EditComic(BaseHandler):
         return webapp2.redirect('/')
 
     def get(self, comic_id):
+        user = users.get_current_user()
+        if users.is_current_user_admin():
+            role = "Dibujante"
+        else:
+            role = "Lector"
         iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
-        self.render_template('edit.html', {'comic': comic})
+        self.render_template('edit.html', {'comic': comic, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
 
 
 class DeleteComic(BaseHandler):
