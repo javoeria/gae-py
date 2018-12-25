@@ -3,17 +3,16 @@
 
 <div class="row">
     <div class="col-lg-12 text-center">
-        <h1>Comics <span class="glyphicon glyphicon-picture" aria-hidden="true"></span></h1>
+        <h1>Comics <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></h1>
     </div>
 </div>
 <br/>
 
 <div class="row">
 	<div class="col-md-2">
-		<a class="btn btn-primary" href="/new">
-	    	Crear comic
-	    	<span style="margin-left: 5px;" class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-		</a>
+		{% if role == 'Dibujante' %}
+		<a class="btn btn-primary" href="/new">Crear</a>
+		{% endif %}
 	</div>
     <div class="col-md-8">
 		<form class="form-horizontal" role="form" action="/" method="get">
@@ -47,7 +46,9 @@
                 <td>{{ comic.author }}</td>
                 <td>
                 	<a class="btn btn-success" href="/show/{{ comic.key().id() }}">Ver</a>
+                	{% if role == 'Dibujante' %}
                 	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
+                	{% endif %}
                 </td>
             </tr>
             {% endif %}
