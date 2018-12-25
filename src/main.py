@@ -1,4 +1,4 @@
-from views import ShowComics, NewComic, ViewComic, EditComic, DeleteComic
+from views import ShowComics, NewComic, ViewComic, EditComic, DeleteComic, DeleteComment
 import webapp2
 
 app = webapp2.WSGIApplication([
@@ -7,5 +7,6 @@ app = webapp2.WSGIApplication([
         ('/show/([\d]+)', ViewComic),
         ('/edit/([\d]+)', EditComic),
         ('/delete/([\d]+)', DeleteComic),
+        ('/out', DeleteComment),
         ],
         debug=True)

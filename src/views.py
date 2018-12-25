@@ -36,7 +36,7 @@ class ShowComics(BaseHandler):
                 role = "Dibujante"
             else:
                 role = "Lector"
-            self.render_template('adds.html', {'comics': comics, 'input': input, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
+            self.render_template('adds.html', {'comics': comics, 'input': input, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
         else:
             self.redirect(users.create_login_url(self.request.uri))
         
@@ -55,7 +55,7 @@ class NewComic(BaseHandler):
             role = "Dibujante"
         else:
             role = "Lector"
-        self.render_template('new.html', {'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
+        self.render_template('new.html', {'user': user, 'role': role, 'logout': users.create_logout_url('/')})
 
 
 class ViewComic(BaseHandler):
@@ -78,7 +78,7 @@ class ViewComic(BaseHandler):
             role = "Lector"
         iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
-        self.render_template('show.html', {'comic': comic, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
+        self.render_template('show.html', {'comic': comic, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
 
 class EditComic(BaseHandler):
 
@@ -100,7 +100,7 @@ class EditComic(BaseHandler):
             role = "Lector"
         iden = int(comic_id)
         comic = db.get(db.Key.from_path('Comic', iden))
-        self.render_template('edit.html', {'comic': comic, 'user': user.nickname(), 'role': role, 'logout': users.create_logout_url('/')})
+        self.render_template('edit.html', {'comic': comic, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
 
 
 class DeleteComic(BaseHandler):
@@ -110,5 +110,15 @@ class DeleteComic(BaseHandler):
         comic = db.get(db.Key.from_path('Comic', iden))
         db.delete(comic)
         return webapp2.redirect('/')
+    
+class DeleteComment(BaseHandler):
 
+    def get(self):
+        comic_id = self.request.GET.get('id')
+        comment_id = self.request.GET.get('c')
+        iden = int(comment_id)
+        comment = db.get(db.Key.from_path('Comment', iden))
+        db.delete(comment)
+        time.sleep(.1)
+        return webapp2.redirect('/show/'+comic_id)
 

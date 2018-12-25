@@ -46,7 +46,7 @@
                 <td>{{ comic.author }}</td>
                 <td>
                 	<a class="btn btn-success" href="/show/{{ comic.key().id() }}">Ver</a>
-                	{% if role == 'Dibujante' %}
+                	{% if role == 'Dibujante' and comic.author == user %}
                 	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
                 	{% endif %}
                 </td>
