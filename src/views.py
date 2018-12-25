@@ -31,12 +31,12 @@ class ShowComics(BaseHandler):
         user = users.get_current_user()
         if user:
             comics = Comic.all()
-            input = self.request.get('input')
+            text = self.request.get('input')
             if users.is_current_user_admin():
                 role = "Dibujante"
             else:
                 role = "Lector"
-            self.render_template('adds.html', {'comics': comics, 'input': input, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
+            self.render_template('adds.html', {'comics': comics, 'input': text, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
         else:
             self.redirect(users.create_login_url(self.request.uri))
         
@@ -56,6 +56,28 @@ class NewComic(BaseHandler):
         else:
             role = "Lector"
         self.render_template('new.html', {'user': user, 'role': role, 'logout': users.create_logout_url('/')})
+        
+class NewImage(BaseHandler):
+
+    def post(self, comic_id):
+        iden = int(comic_id)
+        comic = db.get(db.Key.from_path('Comic', iden))
+        image = Image(comic = comic,
+                      link=self.request.get('inputLink'),
+                      text=self.request.get('inputText'))
+        image.put()
+        time.sleep(.1)
+        return webapp2.redirect('/show/'+comic_id)
+
+    def get(self, comic_id):
+        user = users.get_current_user()
+        if users.is_current_user_admin():
+            role = "Dibujante"
+        else:
+            role = "Lector"
+        iden = int(comic_id)
+        comic = db.get(db.Key.from_path('Comic', iden))
+        self.render_template('image.html', {'comic': comic, 'user': user, 'role': role, 'logout': users.create_logout_url('/')})
 
 
 class ViewComic(BaseHandler):
@@ -122,3 +144,13 @@ class DeleteComment(BaseHandler):
         time.sleep(.1)
         return webapp2.redirect('/show/'+comic_id)
 
+class DeleteImage(BaseHandler):
+
+    def get(self):
+        comic_id = self.request.GET.get('id')
+        image_id = self.request.GET.get('i')
+        iden = int(image_id)
+        image = db.get(db.Key.from_path('Image', iden))
+        db.delete(image)
+        time.sleep(.1)
+        return webapp2.redirect('/show/'+comic_id)
