@@ -3,65 +3,79 @@
 
 <div class="row">
     <div class="col-lg-12 text-center">
-        <h1>Anuncios <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></h1>
+        <h1>Comics <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></h1>
     </div>
 </div>
 <br/>
-<a class="btn btn-primary" href="/new">
-    Crear anuncio
-    <span style="margin-left: 5px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-</a>
-<br/>
-<br/>
 
-{% if adds.count() > 0 %}
 <div class="row">
-    <div class="col-md-2"></div>
+	<div class="col-md-2">
+		{% if role == 'Dibujante' %}
+		<a class="btn btn-primary" href="/new">Crear</a>
+		{% endif %}
+	</div>
     <div class="col-md-8">
+		<form class="form-horizontal" role="form" action="/" method="get">
+			<div class="form-group text-center">
+	        	<input type="text" name="input" id="input" value="{{ input }}" size="50"/>
+	        	<button type="submit" value="submit" class="btn">Buscar <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+			</div>
+		</form>
+	</div>
+    <div class="col-md-2"></div>
+</div>
+
+{% if comics.count() > 0 %}
+<div class="row">
+    <div class="col-md-12">
         <table class="table">
             <thead>
+            <th>Portada</th>
+            <th>Nombre</th>
             <th>Descripci&oacute;n</th>
-            <th>E-mail</th>
-            <th>Fecha de creaci&oacute;n</th>
-            <th>Prioridad</th>
+            <th>Autor</th>
             <th>Acciones</th>
             </thead>
             <tbody>
-            {% for add in adds %}
+            {% for comic in comics %}
+            {% if comic.name.upper().startswith(input.upper()) or (comic.author|string).upper().startswith(input.upper()) %}
             <tr>
-                <td>{{ add.text }}</td>
-                <td>{{ add.author }}</td>
-                <td>{{ add.date.strftime('%Y-%m-%d') }}</td>
-                <td>{{ add.priority }}</td>
-                <td><a class="btn btn-warning" href="/edit/{{ add.key().id() }}">Editar </a></td>
+            	<td><img src="{{ comic.cover }}" height="100"></td>
+                <td>{{ comic.name }}</td>
+                <td>{{ comic.description|truncate(500) }}</td>
+                <td>{{ comic.author }}</td>
+                <td>
+                	<a class="btn btn-success" href="/show/{{ comic.key().id() }}">Ver</a>
+                	{% if role == 'Dibujante' and comic.author == user %}
+                	<a class="btn btn-warning" href="/edit/{{ comic.key().id() }}">Editar</a>
+                	{% endif %}
+                </td>
             </tr>
+            {% endif %}
             {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="col-md-2"></div>
 </div>
 {% else %}
 <div class="row">
     <div class="col-lg-12 text-center">
         <div class="col-md-3"></div>
         <div class="col-md-6 bg-warning warning_mesagge">
-            <label>No existen anuncios todav&iacute;a.</label>
+            <label>No existen comics todav&iacute;a.</label>
         </div>
         <div class="col-md-3"></div>
-
     </div>
 </div>
-
 {% endif %}
 
-        <script type="text/javascript">
-            window.onload = function() {
-                if(!window.location.hash) {
-                    window.location = window.location + '#loaded';
-                    window.location.reload();
-                }
-            }
-        </script>
+<script type="text/javascript">
+    window.onload = function() {
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload();
+        }
+    }
+</script>
 
 {% endblock content %}

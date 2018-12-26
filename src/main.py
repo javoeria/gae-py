@@ -1,11 +1,14 @@
-import views
+from views import ShowComics, NewComic, NewImage, ViewComic, EditComic, DeleteComic, DeleteComment, DeleteImage
 import webapp2
 
 app = webapp2.WSGIApplication([
-        ('/', views.ShowAdds), 
-        ('/comics', views.ShowAdds), 
-        ('/new', views.NewAdd), 
-        ('/edit/([\d]+)', views.EditAdd),
-        ('/delete/([\d]+)', views.DeleteAdd),
+        ('/', ShowComics),
+        ('/new', NewComic),
+        ('/set/([\d]+)', NewImage),
+        ('/show/([\d]+)', ViewComic),
+        ('/edit/([\d]+)', EditComic),
+        ('/delete/([\d]+)', DeleteComic),
+        ('/out', DeleteComment),
+        ('/out2', DeleteImage),
         ],
         debug=True)
