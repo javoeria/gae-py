@@ -5,7 +5,7 @@ class Comic(db.Model):
 
     author = db.UserProperty(auto_current_user=True)
     name = db.StringProperty(required=True)
-    description = db.StringProperty(required=True)
+    description = db.StringProperty(required=True, multiline=True)
     cover = db.URLProperty(required=True)
     create_date = db.DateTimeProperty(auto_now_add=True)
     update_date = db.DateTimeProperty(auto_now_add=True)

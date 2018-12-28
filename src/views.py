@@ -66,6 +66,8 @@ class NewImage(BaseHandler):
                       link=self.request.get('inputLink'),
                       text=self.request.get('inputText'))
         image.put()
+        comic.update_date = datetime.now()
+        comic.put()
         time.sleep(.1)
         return webapp2.redirect('/show/'+comic_id)
 

@@ -15,15 +15,15 @@
 <div class="row">
 	<table class="table">
     	<thead>
-        <th width=475>Imagen</th>
-        <th>Texto</th>
+        <th width=300>Imagen</th>
+        <th width=600>Texto</th>
         <th>Fecha</th>
-        <th>Accion</th>
+        <th>Acci&oacute;n</th>
         </thead>
         <tbody>
         {% for image in comic.images_set.order("date") %}
         <tr>
-        	<td><img src="{{ image.link }}" width="400"></td>
+        	<td><img src="{{ image.link }}" width="250"></td>
         	<td>{{ image.text }}</td>
         	<td>{{ image.date.strftime('%Y-%m-%d') }}</td>
         	{% if comic.author == user %}
